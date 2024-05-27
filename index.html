@@ -30,7 +30,7 @@
 
         .card {
             width: 200px;
-            height: 300px;
+            height: 350px; /* Increased height to accommodate the image URL */
             border-radius: 15px;
             overflow: hidden;
             box-sizing: border-box;
@@ -49,9 +49,17 @@
         .card img {
             width: 80%;
             height: auto;
-            max-height: 80%;
+            max-height: 60%; /* Adjusted to make space for URL text */
             object-fit: contain;
             transition: filter 0.3s;
+        }
+
+        .card p {
+            font-size: 0.8em;
+            color: #666;
+            word-break: break-all; /* Ensures long URLs break properly */
+            margin: 5px 0 0 0;
+            padding: 0 5px;
         }
 
         .card:hover {
@@ -68,7 +76,7 @@
             font-size: 1.2em;
             color: #000;
             position: absolute;
-            bottom: 10px;
+            bottom: 40px; /* Adjusted to avoid overlap with URL text */
             left: 50%;
             transform: translateX(-50%);
             opacity: 0;
@@ -78,11 +86,15 @@
         .card:hover h4 {
             opacity: 1;
         }
+
+        .card:hover p {
+            opacity: 1;
+        }
     </style>
 </head>
 
 <body>
-    <h2>POKÉMON DEX</h2>
+    <h2>POKEMON DEX</h2>
     <div id="root"></div>
 
     <script>
@@ -99,11 +111,13 @@
             pokemon.forEach(item => {
                 const urlParts = item.url.split('/');
                 const id = urlParts[urlParts.length - 2];
+                const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
                 const card = document.createElement('div');
                 card.className = 'card';
                 card.innerHTML = `
                     <h4>${item.name.charAt(0).toUpperCase() + item.name.slice(1)}</h4>
-                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png" alt="${item.name}">
+                    <img src="${imageUrl}" alt="${item.name}">
+                    <p>${imageUrl}</p>
                 `;
                 elDivRoot.appendChild(card);
             });
