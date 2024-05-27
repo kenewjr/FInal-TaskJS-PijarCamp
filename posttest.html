@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokemon Dex</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 2em;
+            color: #333;
+        }
+
+        #root {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .card {
+            width: 200px;
+            height: 300px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-sizing: border-box;
+            align-items: center;
+            background-color: #e0f7fa;
+            display: flex;
+            justify-content: center;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            flex-direction: column;
+            padding: 10px;
+        }
+
+        .card img {
+            width: 80%;
+            height: auto;
+            max-height: 80%;
+            object-fit: contain;
+            transition: filter 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .card:hover img {
+            filter: brightness(0.7);
+        }
+
+        .card h4 {
+            margin: 0;
+            font-size: 1.2em;
+            color: #000;
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .card:hover h4 {
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>POKÉMON DEX</h2>
+    <div id="root"></div>
+
+    <script>
+        const elDivRoot = document.getElementById('root');
+
+        const fetchData = async () => {
+            const res = await fetch('https://pokeapi.co/api/v2/pokemon');
+            const data = await res.json();
+            return data.results;
+        };
+
+        const displayPokemon = (pokemon) => {
+            elDivRoot.innerHTML = '';
+            pokemon.forEach(item => {
+                const urlParts = item.url.split('/');
+                const id = urlParts[urlParts.length - 2];
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <h4>${item.name.charAt(0).toUpperCase() + item.name.slice(1)}</h4>
+                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png" alt="${item.name}">
+                `;
+                elDivRoot.appendChild(card);
+            });
+        };
+
+        const init = async () => {
+            const pokemonData = await fetchData();
+            displayPokemon(pokemonData);
+        };
+
+        init();
+    </script>
+</body>
+
+</html>
